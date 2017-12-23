@@ -1,4 +1,5 @@
-import * as firebase from 'firebase'
+// import * as firebase from 'firebase'
+import firebase from 'react-native-firebase'
 
 export const REQUEST_SONGS = 'REQUEST_SONGS'
 export const RECEIVE_SONGS = 'RECEIVE_SONGS'
@@ -17,10 +18,11 @@ export function invalidateSong() {
     }
   }
   
-  function receiveSongs(json) {
+  function receiveSongs(data) {
     return {
       type: RECEIVE_SONGS,
-      songs: Object.values(json),
+      songs: data,
+      // songs: Object.values(data),
       receivedAt: Date.now()
     }
   }
@@ -28,9 +30,21 @@ export function invalidateSong() {
   function getSongs() {
     return dispatch => {
       dispatch(requestSongs())
-      return firebase.database().ref('songs').on('value', snapshot => {
-        dispatch(receiveSongs(snapshot.val()))
+      // return firebase.firestore().collection('songList').get().then(querySnapshot => {
+      return firebase.firestore().collection('songList').onSnapshot(querySnapshot => {
+        const result = []
+        querySnapshot.forEach(doc=>{
+          result.push(doc.data().song)
+        })
+        dispatch(receiveSongs(result))
       })
+      // return firebase.database().ref('songs').on('value', snapshot => {
+      //   // const result = []
+      //   // querySnapshot.forEach(doc=>{
+      //   //   result.push(doc.data().song)
+      //   // })
+      //   dispatch(receiveSongs(snapshot.val()))
+      // })
         // .then(snapshot => dispatch(receiveSongs(snapshot.val())))
     }
   }

@@ -14,7 +14,8 @@ const AppRoute = StackNavigator(
         }
     },
     {
-        initialRouteName: RouteNames.Login
+        initialRouteName: RouteNames.Main,
+        initialRouteName: RouteNames.Login,
     }
 )
 

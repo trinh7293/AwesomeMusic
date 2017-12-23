@@ -7,7 +7,8 @@ import {
     StyleSheet
 } from 'react-native';
 
-import * as firebase from 'firebase'
+// import * as firebase from 'firebase'
+import firebase from 'react-native-firebase';
 
 import Router from './routes/Router'
 import RouteNames from './routes/RouteNames'
@@ -16,15 +17,15 @@ class Login extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            username: '',
-            password: ''
+            username: 'aneo@gmail.com',
+            password: '123456'
         }
-        firebase.initializeApp({
-            apiKey: "AIzaSyAJbGDCeYKIGhrzcaALcDb-e07EDx1Bi4M",
-            authDomain: "awesomemusic-32daa.firebaseapp.com",
-            databaseURL: "https://awesomemusic-32daa.firebaseio.com",
-            storageBucket: "awesomemusic-32daa.appspot.com",
-        });
+        // firebase.initializeApp({
+        //     apiKey: "AIzaSyAJbGDCeYKIGhrzcaALcDb-e07EDx1Bi4M",
+        //     authDomain: "awesomemusic-32daa.firebaseapp.com",
+        //     databaseURL: "https://awesomemusic-32daa.firebaseio.com",
+        //     storageBucket: "awesomemusic-32daa.appspot.com",
+        // });
     }
 
     onClickLogin = async () => {
@@ -32,7 +33,7 @@ class Login extends Component {
             await firebase.auth().signInWithEmailAndPassword(this.state.username, this.state.password);
             console.log("Logged In!");
             setTimeout(() => {
-                Router.navigate(RouteNames.Main)
+                Router.reset(RouteNames.Main)
             }, 1500);
         } catch (error) {
             console.log('error======',error)

@@ -4,10 +4,19 @@ import {
     Text,
     FlatList,
     TouchableOpacity,
-    StyleSheet
+    StyleSheet,
+    TextInput,
+    Button
 } from 'react-native';
+import firebase from 'react-native-firebase'
 
 class AllSongsScreen extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            songName: ''
+        }
+    }
 
     componentDidMount() {
         this.props.getSongsIfNeeded()
@@ -19,10 +28,31 @@ class AllSongsScreen extends Component {
         return (
             <View style={styles.container}>
                 <FlatList
-                    data = {this.props.songs.items}
+                    data={this.props.songs.items}
                     keyExtractor={this._keyExtractor}
-                    renderItem = {({item}) => <Text>{item}</Text>}
+                    renderItem={({ item }) => <Text>{item}</Text>}
                 />
+                <TextInput
+                    placeholder='song name'
+                    value={this.state.songName}
+                    onChangeText={value => {
+                        this.setState({
+                            songName: value
+                        })
+                    }}
+                />
+                <Button
+                    title='Add'
+                    onPress={() => {
+                        firebase.firestore().collection('songList').add({
+                            song: this.state.songName,
+                        })
+                        this.setState({
+                            songName: ''
+                        })
+                    }}
+                />
+
             </View>
         );
     }
